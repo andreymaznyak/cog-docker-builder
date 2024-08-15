@@ -1,14 +1,15 @@
-# Use an official Python runtime as a parent image
-FROM python:3.11-slim
+# Use the official Docker image as a parent image
+FROM docker:24.0.5
 
 # Install required system packages
-RUN apt-get update && apt-get install -y \
-    curl \
+RUN apk add --no-cache \
+    python3 \
+    py3-pip \
     git \
-    && rm -rf /var/lib/apt/lists/*
+    curl
 
-# Install Docker CLI
-RUN curl -fsSL https://get.docker.com -o get-docker.sh && sh get-docker.sh
+# Install Python packages (if needed)
+RUN pip install --upgrade pip setuptools wheel
 
 # Install Cog
 RUN curl -o /usr/local/bin/cog -L https://github.com/replicate/cog/releases/latest/download/cog_$(uname -s)_$(uname -m) \
